@@ -14,11 +14,11 @@ const path = {
     MANAGE_USERS: 'manage-users',
     MANAGE_PRODUCTS: 'manage-products',
     MANAGE_ORDERS: 'manage-orders',
-    CREATE_PRODUCT: 'create-product',
 
     // MEMBER
     MEMBER: 'member',
     PERSONAL: 'personal',
+    CHECK_ORDER: 'check-order',
 }
 
 export default path;

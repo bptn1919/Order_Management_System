@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from "react-router-dom";
 import { FaSearch, FaShoppingCart , FaFileAlt  } from "react-icons/fa";
 
 function SearchOrder() {
@@ -30,10 +31,13 @@ function SearchOrder() {
                 </button>
 
                 {/* Nút "Đơn hàng của bạn" */}
-                <button className="bg-white flex items-center space-x-2 px-8 py-3 rounded-full text-black text-xl">
-                    <FaFileAlt className="text-black text-xl" />
-                    <span>Đơn hàng của bạn</span>
-                </button>
+                <Link 
+            to="/member/check-order" 
+            className="bg-white flex items-center space-x-2 px-8 py-3 rounded-full text-black text-xl"
+        >
+            <FaFileAlt className="text-black text-xl" />
+            <span>Đơn hàng của bạn</span>
+        </Link>
             </div>
             </div>
         </div>
