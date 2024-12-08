@@ -27,7 +27,7 @@ $totalOrderPages = ceil($totalItems / $itemsPerPage); // Tổng số trang
 $query = "
     SELECT * 
     FROM DonHang 
-    WHERE TrangThaiDonHang = :trangthai
+    WHERE TrangThaiDonHang = :trangthai 
     ORDER BY MaDonHang DESC 
     OFFSET :start ROWS FETCH NEXT :itemsPerPage ROWS ONLY";
 $stmt = $conn->prepare($query);

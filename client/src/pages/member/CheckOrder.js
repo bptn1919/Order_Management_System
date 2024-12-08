@@ -386,7 +386,6 @@ const CheckOrder = () => {
     >
       <option value="Tien mat">Tiền mặt</option>
       <option value="Chuyen khoan">Chuyển khoản</option>
-      <option value="Thanh toan online">Thanh toán online</option>
     </select>
   </div>
 
@@ -439,7 +438,6 @@ const CheckOrder = () => {
                 <td className="px-4 py-2 text-center border-b">{order.CuaHangGui}</td>
                 <td className="px-4 py-2 text-center border-b">{order.NgayThanhToan}</td>
                 <td className="px-4 py-2 text-center border-b">{formatPaymentMethod(order.PhuongThucThanhToan)}</td>
-
                 <td className="px-4 py-2 text-center border-b">
                           <button
                             onClick={() => handleEdit(order)}

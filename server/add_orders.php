@@ -21,7 +21,6 @@ if (empty($MaDonHang) || empty($NgayTao) || empty($TongSoTien) || empty($TrangTh
     exit;
 }
 
-
 // Gọi stored procedure để thêm đơn hàng
 $sql = "EXEC InsertDonHang ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
 

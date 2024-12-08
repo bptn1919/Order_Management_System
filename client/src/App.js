@@ -16,8 +16,6 @@ function App() {
           
         <Route path={path.MEMBER} element={<MemberLayout />}>
           <Route path={path.CHECK_ORDER} element={<CheckOrder />}/>
-        </Route>
-        <Route path={path.MEMBER} element={<MemberLayout />}>
           <Route path={path.Add_ORDER} element={<AddOrder />}/>
         </Route>
 
