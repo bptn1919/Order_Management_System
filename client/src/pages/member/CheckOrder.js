@@ -78,26 +78,46 @@ const CheckOrder = () => {
   };
 
   // Hàm xử lý khi người dùng gửi form chỉnh sửa
-  const handleSubmitEdit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch("http://localhost/server/edit_orders.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      if (response.ok) {
-        fetchOrders(activeTab, pagination.currentPage); // Lấy lại dữ liệu sau khi chỉnh sửa
-        setIsEditing(false); // Đóng form chỉnh sửa
-      } else {
-        alert("Cập nhật thất bại. Vui lòng thử lại.");
-      }
-    } catch (error) {
-      alert("Có lỗi xảy ra khi cập nhật đơn hàng.");
-    }
+// Hàm xử lý khi người dùng gửi form chỉnh sửa
+const handleSubmitEdit = async (e) => {
+  e.preventDefault();
+
+  // Chuyển dữ liệu từ formData sang định dạng mà PHP có thể xử lý
+  const updatedOrderData = {
+    MaDonHang: formData.MaDonHang,
+    NgayTao: formData.NgayTao,
+    TongSoTien: formData.TongSoTien,
+    TrangThaiDonHang: formData.TrangThaiDonHang,
+    NhanVienXuLy: formData.NhanVienXuLy,
+    KhoChua: formData.KhoChua,
+    NguoiNhan: formData.NguoiNhan,
+    CuaHangGui: formData.CuaHangGui,
+    NgayThanhToan: formData.NgayThanhToan,
+    PhuongThucThanhToan: formData.PhuongThucThanhToan,
   };
+
+  try {
+    // Gửi yêu cầu API tới PHP
+    const response = await fetch("http://localhost/server/edit_orders.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedOrderData), // Gửi dữ liệu vào body
+    });
+
+    if (response.ok) {
+      fetchOrders(activeTab, pagination.currentPage); // Lấy lại danh sách đơn hàng sau khi chỉnh sửa
+      setIsEditing(false); // Đóng form chỉnh sửa
+    } else {
+      alert("Cập nhật thất bại. Vui lòng thử lại.");
+    }
+  } catch (error) {
+    alert("Có lỗi xảy ra khi cập nhật đơn hàng.");
+  }
+};
+
+  
 
   // Hàm xóa đơn hàng
   const handleDelete = async (MaDonHang) => {
@@ -309,7 +329,7 @@ const CheckOrder = () => {
   <div className="mb-4">
     <label className="block mb-2">Trạng thái</label>
     <select
-      name="TrangThai"
+      name="TrangThaiDonHang"
       value={formData.TrangThaiDonHang}
       onChange={handleFormChange}
       className="w-full p-2 border rounded"
