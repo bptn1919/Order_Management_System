@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';  // Import BrowserRouter
 import { ToastContainer } from 'react-toastify';
 import { Public, Home } from './pages/public/index';
-import { MemberLayout, CheckOrder} from './pages/member';
+import { MemberLayout, CheckOrder, AddOrder} from './pages/member';
 import path from './utils/path';
 
 function App() {
@@ -16,6 +16,9 @@ function App() {
           
         <Route path={path.MEMBER} element={<MemberLayout />}>
           <Route path={path.CHECK_ORDER} element={<CheckOrder />}/>
+        </Route>
+        <Route path={path.MEMBER} element={<MemberLayout />}>
+          <Route path={path.Add_ORDER} element={<AddOrder />}/>
         </Route>
 
         </Routes>

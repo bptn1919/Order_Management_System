@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 const CheckOrder = () => {
-  const [activeTab, setActiveTab] = useState("sent"); // Tab hiện tại (Gửi đi/Nhận)
+  const [activeTab, setActiveTab] = useState("Đang chờ xử lý"); // Tab hiện tại
   const [orders, setOrders] = useState([]); // Danh sách đơn hàng
   const [pagination, setPagination] = useState({
     currentPage: 1,
@@ -9,6 +9,13 @@ const CheckOrder = () => {
   }); // Thông tin phân trang
   const [loading, setLoading] = useState(false); // Trạng thái đang tải
   const [error, setError] = useState(null); // Thông báo lỗi API
+  const [isEditing, setIsEditing] = useState(false); // Trạng thái chỉnh sửa
+  const [editingOrder, setEditingOrder] = useState(null); // Đơn hàng đang chỉnh sửa
+  const [formData, setFormData] = useState({
+    MaDonHang: "",
+    NgayTao: "",
+    TongSoTien: "",
+  });
 
   // Hàm lấy dữ liệu từ API
   const fetchOrders = async (trangThai, page = 1) => {
@@ -16,12 +23,14 @@ const CheckOrder = () => {
     setError(null); // Reset lỗi
     try {
       const response = await fetch(
-        `http://localhost/server/fetch_orders.php?trangthai=${trangThai}&page=${page}`
+        `http://localhost/server/fetch_orders.php?trangthai=${encodeURIComponent(
+          trangThai
+        )}&page=${page}`
       );
       const data = await response.json();
 
       if (response.ok) {
-        setOrders(data.orders || []);
+        setOrders(data.orders || []); // Lưu dữ liệu đơn hàng vào state
         setPagination(data.pagination || { currentPage: 1, totalPages: 1 });
       } else {
         setError("Không thể tải dữ liệu. Vui lòng thử lại.");
@@ -32,10 +41,87 @@ const CheckOrder = () => {
     setLoading(false);
   };
 
+  // Hàm chỉnh sửa đơn hàng
+  const handleEdit = (order) => {
+    setIsEditing(true);
+    setEditingOrder(order);
+    setFormData({
+      MaDonHang: order.MaDonHang,
+      NgayTao: order.NgayTao,
+      TongSoTien: order.TongSoTien,
+      TrangThaiDonHang: order.TrangThaiDonHang,
+      NhanVienXuLy: order.NhanVienXuLy,
+      KhoChua: order.KhoChua,
+      NguoiNhan: order.NguoiNhan,
+      CuaHangGui: order.CuaHangGui,
+      NgayThanhToan: order.NgayThanhToan,
+      PhuongThucThanhToan: order.PhuongThucThanhToan,
+    });
+  };
+  const formatPaymentMethod = (method) => {
+    const paymentMethods = {
+      'Tien Mat': 'Tiền mặt',
+      'Chuyen Khoan': 'Chuyển khoản',
+    };
+  
+    return paymentMethods[method] || method; // Trả về giá trị gốc nếu không tìm thấy
+  };
+  
+
+  // Hàm xử lý khi người dùng thay đổi thông tin trong form
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // Hàm xử lý khi người dùng gửi form chỉnh sửa
+  const handleSubmitEdit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost/server/edit_orders.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      if (response.ok) {
+        fetchOrders(activeTab, pagination.currentPage); // Lấy lại dữ liệu sau khi chỉnh sửa
+        setIsEditing(false); // Đóng form chỉnh sửa
+      } else {
+        alert("Cập nhật thất bại. Vui lòng thử lại.");
+      }
+    } catch (error) {
+      alert("Có lỗi xảy ra khi cập nhật đơn hàng.");
+    }
+  };
+
+  // Hàm xóa đơn hàng
+  const handleDelete = async (MaDonHang) => {
+    if (window.confirm("Bạn có chắc chắn muốn xóa đơn hàng này không?")) {
+      try {
+        const response = await fetch(
+          `http://localhost/server/delete_orders.php?MaDonHang=${MaDonHang}`,
+          { method: "DELETE" }
+        );
+
+        if (response.ok) {
+          fetchOrders(activeTab, pagination.currentPage); // Lấy lại danh sách đơn hàng sau khi xóa
+        } else {
+          alert("Xóa đơn hàng thất bại. Vui lòng thử lại.");
+        }
+      } catch (error) {
+        alert("Có lỗi xảy ra khi xóa đơn hàng.");
+      }
+    }
+  };
+
   // Gọi API khi tab hoặc trang thay đổi
   useEffect(() => {
-    const trangThai = activeTab === "sent" ? "Gửi đi" : "Nhận";
-    fetchOrders(trangThai, pagination.currentPage);
+    fetchOrders(activeTab, pagination.currentPage);
   }, [activeTab, pagination.currentPage]);
 
   // Hàm thay đổi tab
@@ -54,6 +140,7 @@ const CheckOrder = () => {
     window.location.href = "http://localhost:3000/";
   };
 
+  // Phân trang
   const renderPagination = () => {
     const { currentPage, totalPages } = pagination;
     const paginationElements = [];
@@ -131,7 +218,7 @@ const CheckOrder = () => {
           disabled={currentPage === 1}
           onClick={() => changePage(currentPage - 1)}
         >
-          « Trang trước
+          «
         </button>
         {paginationElements}
         {/* Trang sau */}
@@ -140,32 +227,29 @@ const CheckOrder = () => {
           disabled={currentPage === totalPages}
           onClick={() => changePage(currentPage + 1)}
         >
-          Trang sau »
+          »
         </button>
       </div>
     );
   };
 
   return (
-    <div className="bg-orange-400 w-full min-h-screen flex">
-      {/* Sidebar với các nút */}
-      <div className="w-1/4 bg-orange-500 p-4">
-        <button
-          className={`w-full py-3 mb-4 text-white font-bold rounded ${
-            activeTab === "sent" ? "bg-red-600" : "bg-red-400"
-          }`}
-          onClick={() => handleTabChange("sent")}
-        >
-          Đơn hàng gửi
-        </button>
-        <button
-          className={`w-full py-3 mb-4 text-white font-bold rounded ${
-            activeTab === "received" ? "bg-red-600" : "bg-red-400"
-          }`}
-          onClick={() => handleTabChange("received")}
-        >
-          Đơn hàng nhận
-        </button>
+    <div className="bg-orange-400 w-full min-h-screen flex" >
+      {/* Sidebar */}
+      <div className="w-1/4 bg-orange-500 p-4" style={{ width: '20%' }}>
+        {["Đang chờ xử lý", "Đang giao hàng", "Đã giao", "Đã hủy"].map(
+          (status) => (
+            <button
+              key={status}
+              className={`w-full py-3 mb-4 text-white font-bold rounded ${
+                activeTab === status ? "bg-red-600" : "bg-red-400"
+              }`}
+              onClick={() => handleTabChange(status)}
+            >
+              {status}
+            </button>
+          )
+        )}
         <button
           className="w-full py-3 text-white font-bold bg-gray-600 rounded"
           onClick={handleExit}
@@ -182,48 +266,206 @@ const CheckOrder = () => {
           <div className="text-red-500">{error}</div>
         ) : (
           <div className="bg-white p-4 rounded shadow-md">
-            <h2 className="text-xl font-bold mb-4">
-              {activeTab === "sent" ? "Đơn hàng gửi đi" : "Đơn hàng nhận"}
-            </h2>
+            <h2 className="text-xl font-bold mb-4">Danh sách đơn hàng</h2>
 
-            {/* Bảng hiển thị đơn hàng */}
-            <table className="min-w-full bg-white border border-gray-300">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="px-4 py-2 text-left border-b">Mã đơn hàng</th>
-                  <th className="px-4 py-2 text-left border-b">Ngày tạo</th>
-                  <th className="px-4 py-2 text-left border-b">Tổng tiền</th>
-                  <th className="px-4 py-2 text-left border-b">Thao tác</th>
-                </tr>
-              </thead>
-              <tbody>
-                {orders.length > 0 ? (
-                  orders.map((order) => (
-                    <tr key={order.MaDonHang}>
-                      <td className="px-4 py-2 border-b">{order.MaDonHang}</td>
-                      <td className="px-4 py-2 border-b">{order.NgayTao}</td>
-                      <td className="px-4 py-2 border-b">
-                        {order.TongSoTien} VND
-                      </td>
-                      <td className="px-4 py-2 border-b">
-                        <button className="bg-blue-500 text-white px-4 py-2 rounded mr-2">
-                          Chỉnh sửa
-                        </button>
-                        <button className="bg-red-500 text-white px-4 py-2 rounded">
-                          Xóa
-                        </button>
+            {/* Form chỉnh sửa */}
+            {isEditing && (
+              <div className="bg-white p-4 rounded shadow-md">
+                <h2 className="text-xl font-bold mb-4">Chỉnh sửa đơn hàng</h2>
+                <form onSubmit={handleSubmitEdit}>
+  <div className="mb-4">
+    <label className="block mb-2">Mã đơn hàng</label>
+    <input
+      type="text"
+      name="MaDonHang"
+      value={formData.MaDonHang}
+      readOnly
+      className="w-full p-2 border rounded"
+    />
+  </div>
+
+  <div className="mb-4">
+    <label className="block mb-2">Ngày tạo</label>
+    <input
+      type="date"
+      name="NgayTao"
+      value={formData.NgayTao}
+      onChange={handleFormChange}
+      className="w-full p-2 border rounded"
+    />
+  </div>
+
+  <div className="mb-4">
+    <label className="block mb-2">Tổng tiền (VND)</label>
+    <input
+      type="number"
+      name="TongSoTien"
+      value={formData.TongSoTien}
+      onChange={handleFormChange}
+      className="w-full p-2 border rounded"
+    />
+  </div>
+
+  <div className="mb-4">
+    <label className="block mb-2">Trạng thái</label>
+    <select
+      name="TrangThai"
+      value={formData.TrangThaiDonHang}
+      onChange={handleFormChange}
+      className="w-full p-2 border rounded"
+    >
+      <option value="Dang cho xu ly">Đang chờ xử lý</option>
+      <option value="Dang giao hang">Đang giao hàng</option>
+      <option value="Da giao">Đã giao hàng</option>
+      <option value="Da huy">Đã hủy</option>
+    </select>
+  </div>
+
+  <div className="mb-4">
+    <label className="block mb-2">Nhân viên xử lý</label>
+    <input
+      type="text"
+      name="NhanVienXuLy"
+      value={formData.NhanVienXuLy}
+      onChange={handleFormChange}
+      className="w-full p-2 border rounded"
+    />
+  </div>
+
+  <div className="mb-4">
+    <label className="block mb-2">Kho chứa</label>
+    <input
+      type="text"
+      name="KhoChua"
+      value={formData.KhoChua}
+      onChange={handleFormChange}
+      className="w-full p-2 border rounded"
+    />
+  </div>
+
+  <div className="mb-4">
+    <label className="block mb-2">Người nhận</label>
+    <input
+      type="text"
+      name="NguoiNhan"
+      value={formData.NguoiNhan}
+      onChange={handleFormChange}
+      className="w-full p-2 border rounded"
+    />
+  </div>
+
+  <div className="mb-4">
+    <label className="block mb-2">Cửa hàng gửi</label>
+    <input
+      type="text"
+      name="CuaHangGui"
+      value={formData.CuaHangGui}
+      onChange={handleFormChange}
+      className="w-full p-2 border rounded"
+    />
+  </div>
+
+  <div className="mb-4">
+    <label className="block mb-2">Ngày thanh toán</label>
+    <input
+      type="date"
+      name="NgayThanhToan"
+      value={formData.NgayThanhToan}
+      onChange={handleFormChange}
+      className="w-full p-2 border rounded"
+    />
+  </div>
+
+  <div className="mb-4">
+    <label className="block mb-2">Phương thức thanh toán</label>
+    <select
+      name="PhuongThucThanhToan"
+      value={formData.PhuongThucThanhToan}
+      onChange={handleFormChange}
+      className="w-full p-2 border rounded"
+    >
+      <option value="Tien mat">Tiền mặt</option>
+      <option value="Chuyen khoan">Chuyển khoản</option>
+      <option value="Thanh toan online">Thanh toán online</option>
+    </select>
+  </div>
+
+  <div className="flex justify-end">
+    <button
+      type="submit"
+      className="bg-blue-500 text-white px-4 py-2 rounded"
+    >
+      Cập nhật
+    </button>
+    <button
+      type="button"
+      onClick={() => setIsEditing(false)}
+      className="ml-2 bg-gray-500 text-white px-4 py-2 rounded"
+    >
+      Hủy
+    </button>
+  </div>
+</form>
+
+              </div>
+            )}
+
+            {!isEditing && (
+              <table className="min-w-full bg-white border border-gray-300">
+                <thead>
+                  <tr className="bg-gray-100">
+                  <th className="px-4 py-2 text-center border-b">Mã đơn hàng</th>
+            <th className="px-4 py-2 text-center border-b">Ngày tạo</th>
+            <th className="px-4 py-2 text-center border-b">Tổng tiền (VND)</th>
+            <th className="px-4 py-2 text-center border-b">Nhân viên xử lý</th>
+            <th className="px-4 py-2 text-center border-b">Kho chứa</th>
+            <th className="px-4 py-2 text-center border-b">Người nhận</th>
+            <th className="px-4 py-2 text-center border-b">Cửa hàng gửi</th>
+            <th className="px-4 py-2 text-center border-b">Ngày thanh toán</th>
+            <th className="px-4 py-2 text-center border-b">Phương thức thanh toán</th>
+            <th className="px-4 py-2 text-center border-b">Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {orders.length > 0 ? (
+                    orders.map((order) => (
+                      <tr key={order.MaDonHang}>
+                        <td className="px-4 py-2 text-center border-b">{order.MaDonHang}</td>
+                <td className="px-4 py-2 text-center border-b">{order.NgayTao}</td>
+                <td className="px-4 py-2 text-center border-b">{order.TongSoTien}</td>
+                <td className="px-4 py-2 text-center border-b">{order.NhanVienXuLy}</td>
+                <td className="px-4 py-2 text-center border-b">{order.KhoChua}</td>
+                <td className="px-4 py-2 text-center border-b">{order.NguoiNhan}</td>
+                <td className="px-4 py-2 text-center border-b">{order.CuaHangGui}</td>
+                <td className="px-4 py-2 text-center border-b">{order.NgayThanhToan}</td>
+                <td className="px-4 py-2 text-center border-b">{formatPaymentMethod(order.PhuongThucThanhToan)}</td>
+
+                <td className="px-4 py-2 text-center border-b">
+                          <button
+                            onClick={() => handleEdit(order)}
+                            className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+                          >
+                            Chỉnh sửa
+                          </button>
+                          <button
+                            onClick={() => handleDelete(order.MaDonHang)}
+                            className="bg-red-500 text-white px-4 py-2 rounded"
+                          >
+                            Xóa
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="10" className="px-4 py-2 text-center">
+                        Không có đơn hàng nào.
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="4" className="px-4 py-2 text-center">
-                      Không có đơn hàng nào.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+                  )}
+                </tbody>
+              </table>
+            )}
 
             {/* Phân trang */}
             {renderPagination()}
@@ -234,4 +476,4 @@ const CheckOrder = () => {
   );
 };
 
-export default CheckOrder;
+export default CheckOrder; 
