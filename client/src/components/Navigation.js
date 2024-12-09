@@ -1,4 +1,5 @@
 import React from 'react';
+import path from '../utils/path';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
@@ -11,6 +12,15 @@ const Navigation = () => {
         navigate('/login'); // Điều hướng đến trang đăng nhập
     };
 
+    const handleNhanvienclick = () => {
+          navigate(path.CHITIETNHANVIEN);
+      };
+
+      const handleCuahangclick = () => {
+        navigate(path.CHITIETCUAHANG);
+    };
+    
+
     return (
         <div className="bg-red-600 w-full">
             {/* Khung giới hạn nội dung thanh điều hướng */}
@@ -22,16 +32,19 @@ const Navigation = () => {
                         Trang chủ
                     </Link>
 
-                    {/* Chính sách */}
-                    <Link to="/policy" className="hover:text-gray-200 text-white">
-                        Chính sách
-                    </Link>
+                      {/* Nhân viên */}
+                     <button 
+                    onClick={handleNhanvienclick} 
+                    className="hover:text-gray-200 text-white">
+                    Nhân viên
+                   </button>
 
                     {/* Liên hệ */}
-                    <div className="flex items-center space-x-2 cursor-pointer hover:text-gray-200 text-white">
-                        <IoChatbubbleEllipsesOutline color="orange" size={20} className="text--800 h-6" />
-                        <span className="text-base">Liên hệ</span>
-                    </div>
+                    <button 
+                    onClick={handleCuahangclick} 
+                    className="hover:text-gray-200 text-white">
+                    Cửa hàng
+                   </button>
                 </div>
 
                 {/* Phía bên phải */}

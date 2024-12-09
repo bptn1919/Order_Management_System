@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';  // Import BrowserRouter
 import { ToastContainer } from 'react-toastify';
-import { Public, Home } from './pages/public/index';
+import { Public, Home, Chitietnhanvien } from './pages/public/index';
 import { MemberLayout, CheckOrder} from './pages/member';
 import path from './utils/path';
 
@@ -12,6 +12,7 @@ function App() {
         <Routes>
           <Route path={path.PUBLIC} element={<Public />}>
             <Route path={path.HOME} element={<Home />} />
+            <Route path = {path.CHITIETNHANVIEN} element={<Chitietnhanvien />} />
           </Route>
           
         <Route path={path.MEMBER} element={<MemberLayout />}>

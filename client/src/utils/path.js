@@ -7,6 +7,8 @@ const path = {
     DETAIL_PRODUCT: 'product/:productId', 
     FINAL_REGISTER: 'finalRegister/:status',
     RESET_PASSWORD: 'reset-password/:token',
+    CHITIETNHANVIEN: '/chitiet-nhanvien',
+    CHITIETCUAHANG: '/chitiet-cuahang',
 
     // ADMIN
     ADMIN: 'admin',
