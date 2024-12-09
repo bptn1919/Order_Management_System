@@ -58,15 +58,7 @@ const CheckOrder = () => {
       PhuongThucThanhToan: order.PhuongThucThanhToan,
     });
   };
-  const formatPaymentMethod = (method) => {
-    const paymentMethods = {
-      'Tien Mat': 'Tiền mặt',
-      'Chuyen Khoan': 'Chuyển khoản',
-    };
-  
-    return paymentMethods[method] || method; // Trả về giá trị gốc nếu không tìm thấy
-  };
-  
+
 
   // Hàm xử lý khi người dùng thay đổi thông tin trong form
   const handleFormChange = (e) => {
@@ -468,7 +460,12 @@ const handleSubmitEdit = async (e) => {
                         <td className="px-4 py-2 text-center border-b">{order.NguoiNhan}</td>
                         <td className="px-4 py-2 text-center border-b">{order.CuaHangGui}</td>
                         <td className="px-4 py-2 text-center border-b">{order.NgayThanhToan}</td>
-                        <td className="px-4 py-2 text-center border-b">{formatPaymentMethod(order.PhuongThucThanhToan)}</td>
+                        <td className="px-4 py-2 text-center border-b">
+                          {order.PhuongThucThanhToan === 'Tien mat' ? 'Tiền mặt' : 
+                           order.PhuongThucThanhToan === 'Chuyen khoan' ? 'Chuyển khoản' : 
+                           order.PhuongThucThanhToan}
+                        </td>
+
                         <td className="px-4 py-2 text-center border-b"> 
                           <button
                             onClick={() => handleEdit(order)}
