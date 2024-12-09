@@ -25,16 +25,16 @@ function SearchOrder() {
             {/* Nút tạo đơn hàng, đơn hàng của bạn và giỏ hàng */}
             <div className="flex items-center justify-center space-x-6 w-full  max-w-lg mb-6 mt-5">
                 {/* Nút tạo đơn hàng */}
-                <button className="bg-white px-8 py-3 rounded-full text-black text-xl flex items-center space-x-2">
-                    <span>Tạo đơn hàng</span>
+                <Link 
+            to="/member/add-order" 
+                className="bg-white px-8 py-3 rounded-full text-black text-xl flex items-center space-x-2">
                     <FaShoppingCart className="text-black text-xl" />
-                </button>
-
+                    <span>Tạo đơn hàng</span>
+                </Link>
                 {/* Nút "Đơn hàng của bạn" */}
                 <Link 
             to="/member/check-order" 
-            className="bg-white flex items-center space-x-2 px-8 py-3 rounded-full text-black text-xl"
-        >
+            className="bg-white flex items-center space-x-2 px-8 py-3 rounded-full text-black text-xl" >
             <FaFileAlt className="text-black text-xl" />
             <span>Đơn hàng của bạn</span>
         </Link>

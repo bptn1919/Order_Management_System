@@ -21,6 +21,7 @@ const path = {
     MEMBER: 'member',
     PERSONAL: 'personal',
     CHECK_ORDER: 'check-order',
+    Add_ORDER: 'add-order',
 }
 
 export default path;
