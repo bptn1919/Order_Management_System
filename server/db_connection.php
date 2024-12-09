@@ -9,6 +9,7 @@ try {
     $conn = new PDO("sqlsrv:server=$serverName;Database=$database", "", "");
     // Thiết lập chế độ báo lỗi của PDO
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    echo"kết nối thành công";
 } catch (PDOException $e) {
     die(json_encode(['error' => 'Lỗi kết nối cơ sở dữ liệu: ' . $e->getMessage()])); 
 }
