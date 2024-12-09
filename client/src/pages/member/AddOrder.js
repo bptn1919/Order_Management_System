@@ -145,21 +145,21 @@ function AddOrder() {
           </div>
 
           <div style={{ marginBottom: '15px' }}>
-  <label style={{ fontWeight: 'bold', marginBottom: '8px', display: 'block' }}>Trạng Thái:</label>
-  <select
-    value={TrangThai}
-    onChange={(e) => setTrangThai(e.target.value)}
-    required
-    style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
-  >
-    <option value="">Chọn trạng thái</option>
-    {Object.keys(trangThaiMap).map((trangThai, index) => (
-      <option key={index} value={trangThai}>
-        {trangThaiMap[trangThai]}  {/* Hiển thị giá trị có dấu */}
-      </option>
-    ))}
-  </select>
-</div>
+            <label style={{ fontWeight: 'bold', marginBottom: '8px', display: 'block' }}>Trạng Thái:</label>
+            <select
+              value={TrangThai}
+              onChange={(e) => setTrangThai(e.target.value)}
+              required
+              style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
+            >
+            <option value="">Chọn trạng thái</option>
+            {Object.keys(trangThaiMap).map((trangThai, index) => (
+            <option key={index} value={trangThai}>
+            {trangThaiMap[trangThai]}  {/* Hiển thị giá trị có dấu */}
+            </option>
+             ))}
+            </select>
+          </div>
 
 
 
