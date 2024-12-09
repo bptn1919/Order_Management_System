@@ -1,19 +1,21 @@
 <?php
-// Thông tin kết nối cơ sở dữ liệu
-$serverName = "DESKTOP-4CDMDCJ";  // Địa chỉ server SQL
-$database = "database1";      // Tên cơ sở dữ liệu
-header('Access-Control-Allow-Origin: *'); // Cung cấp quyền truy cập từ mọi nguồn
+header('Access-Control-Allow-Origin: *');
+header('Content-Type: application/json');
+// Kết nối cơ sở dữ liệu
+function connectDB() {
+    $serverName = "DESKTOP-4CDMDCJ"; // Thay bằng tên server của bạn
+    $database = "database1";        // Thay bằng tên cơ sở dữ liệu
+    $username = "";                 // Thay bằng tên người dùng nếu có
+    $password = "";                 // Thay bằng mật khẩu nếu có
 
-// Kết nối đến SQL Server sử dụng PDO
-try {
-    $conn = new PDO("sqlsrv:server=$serverName;Database=$database", "", "");
-    // Thiết lập chế độ báo lỗi của PDO
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo"kết nối thành công";
-} catch (PDOException $e) {
-    die(json_encode(['error' => 'Lỗi kết nối cơ sở dữ liệu: ' . $e->getMessage()])); 
+    try {
+        $pdo = new PDO("sqlsrv:Server=$serverName;Database=$database", $username, $password);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $pdo;
+    } catch (PDOException $e) {
+        die(json_encode(['error' => 'Lỗi kết nối cơ sở dữ liệu: ' . $e->getMessage()]));
+    }
 }
-
 // Hàm loại bỏ dấu tiếng Việt
 function removeVietnameseAccents($str) {
     $accents = [

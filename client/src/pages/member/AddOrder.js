@@ -50,7 +50,7 @@ function AddOrder() {
       formData.append('NgayThanhToan', NgayThanhToan);
       formData.append('PhuongThucThanhToan', PhuongThucThanhToan);
   
-      fetch("http://localhost/server/add_orders.php", {
+      fetch("http://localhost:8000/add_orders.php", {
         method: 'POST',
         body: formData,
       })

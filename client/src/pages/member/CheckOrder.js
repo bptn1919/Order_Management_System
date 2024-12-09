@@ -23,7 +23,7 @@ const CheckOrder = () => {
     setError(null); // Reset lỗi
     try {
       const response = await fetch(
-        `http://localhost/server/fetch_orders.php?trangthai=${encodeURIComponent(
+        `http://localhost:8000/fetch_orders.php?trangthai=${encodeURIComponent(
           trangThai
         )}&page=${page}`
       );
@@ -95,7 +95,7 @@ const handleSubmitEdit = async (e) => {
 
   try {
     // Gửi yêu cầu API tới PHP
-    const response = await fetch("http://localhost/server/edit_orders.php", {
+    const response = await fetch("http://localhost:8000/edit_orders.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -127,7 +127,7 @@ const handleSubmitEdit = async (e) => {
     if (window.confirm("Bạn có chắc chắn muốn xóa đơn hàng này không?")) {
       try {
         const response = await fetch(
-          `http://localhost/server/delete_orders.php?MaDonHang=${MaDonHang}`,
+          `http://localhost:8000/delete_orders.php?MaDonHang=${MaDonHang}`,
           { method: "DELETE" }
         );
 
