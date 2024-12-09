@@ -1,9 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';  // Import BrowserRouter
 import { ToastContainer } from 'react-toastify';
-import { Public, Home, Chitietnhanvien } from './pages/public/index';
-import { MemberLayout, CheckOrder} from './pages/member';
+import { Public, Home, Chitietnhanvien, Chitietcuahang } from './pages/public/index';
+import { MemberLayout, CheckOrder, AddOrder} from './pages/member';
 import path from './utils/path';
+import Chitiet from './pages/public/Chitietnhanvien';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route path={path.PUBLIC} element={<Public />}>
             <Route path={path.HOME} element={<Home />} />
             <Route path = {path.CHITIETNHANVIEN} element={<Chitietnhanvien />} />
+            <Route path = {path.CHITIETCUAHANG} element={<Chitietcuahang />} />
           </Route>
           
         <Route path={path.MEMBER} element={<MemberLayout />}>
