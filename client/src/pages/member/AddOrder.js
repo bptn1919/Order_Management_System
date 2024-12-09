@@ -228,12 +228,12 @@ function AddOrder() {
             >
               <option value="">Chọn phương thức thanh toán</option>
               {Object.keys(phuongThucThanhToanMap).map((phuongthuc, index) => (
-      <option key={index} value={phuongthuc}>
-        {phuongThucThanhToanMap[phuongthuc]}  
-      </option>
-    ))}
-  </select>
-</div>
+              <option key={index} value={phuongthuc}>
+              {phuongThucThanhToanMap[phuongthuc]}  
+              </option>
+                ))}
+            </select>
+          </div>
           <button
             type="submit"
             style={{

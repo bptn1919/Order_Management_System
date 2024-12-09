@@ -71,6 +71,7 @@ const CheckOrder = () => {
   // Hàm xử lý khi người dùng thay đổi thông tin trong form
   const handleFormChange = (e) => {
     const { name, value } = e.target;
+    console.log("Đang thay đổi:", name, value); // Xem giá trị khi người dùng nhập
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -96,6 +97,10 @@ const handleSubmitEdit = async (e) => {
     PhuongThucThanhToan: formData.PhuongThucThanhToan,
   };
 
+  console.log("Dữ liệu gửi đi:", updatedOrderData);
+  console.log("Phương thức thanh toán trước khi gửi:", formData.PhuongThucThanhToan);
+
+
   try {
     // Gửi yêu cầu API tới PHP
     const response = await fetch("http://localhost/server/edit_orders.php", {
@@ -106,16 +111,22 @@ const handleSubmitEdit = async (e) => {
       body: JSON.stringify(updatedOrderData), // Gửi dữ liệu vào body
     });
 
+    console.log("Phản hồi từ server:", response);
+
     if (response.ok) {
+      console.log("Cập nhật thành công");
       fetchOrders(activeTab, pagination.currentPage); // Lấy lại danh sách đơn hàng sau khi chỉnh sửa
       setIsEditing(false); // Đóng form chỉnh sửa
     } else {
+      console.error("Cập nhật thất bại. Phản hồi:", response);
       alert("Cập nhật thất bại. Vui lòng thử lại.");
     }
   } catch (error) {
+    console.error("Lỗi khi gửi API:", error);
     alert("Có lỗi xảy ra khi cập nhật đơn hàng.");
   }
 };
+
 
   
 
@@ -424,7 +435,7 @@ const handleSubmitEdit = async (e) => {
       Hủy
     </button>
   </div>
-</form>
+</form>                  
 
               </div>
             )}
@@ -434,15 +445,15 @@ const handleSubmitEdit = async (e) => {
                 <thead>
                   <tr className="bg-gray-100">
                   <th className="px-4 py-2 text-center border-b">Mã đơn hàng</th>
-            <th className="px-4 py-2 text-center border-b">Ngày tạo</th>
-            <th className="px-4 py-2 text-center border-b">Tổng tiền (VND)</th>
-            <th className="px-4 py-2 text-center border-b">Nhân viên xử lý</th>
-            <th className="px-4 py-2 text-center border-b">Kho chứa</th>
-            <th className="px-4 py-2 text-center border-b">Người nhận</th>
-            <th className="px-4 py-2 text-center border-b">Cửa hàng gửi</th>
-            <th className="px-4 py-2 text-center border-b">Ngày thanh toán</th>
-            <th className="px-4 py-2 text-center border-b">Phương thức thanh toán</th>
-            <th className="px-4 py-2 text-center border-b">Thao tác</th>
+                  <th className="px-4 py-2 text-center border-b">Ngày tạo</th>
+                  <th className="px-4 py-2 text-center border-b">Tổng tiền (VND)</th>
+                  <th className="px-4 py-2 text-center border-b">Nhân viên xử lý</th>
+                  <th className="px-4 py-2 text-center border-b">Kho chứa</th>
+                  <th className="px-4 py-2 text-center border-b">Người nhận</th>
+                  <th className="px-4 py-2 text-center border-b">Cửa hàng gửi</th>
+                  <th className="px-4 py-2 text-center border-b">Ngày thanh toán</th>
+                  <th className="px-4 py-2 text-center border-b">Phương thức thanh toán</th>
+                  <th className="px-4 py-2 text-center border-b">Thao tác</th>  
                   </tr>
                 </thead>
                 <tbody>
@@ -450,15 +461,15 @@ const handleSubmitEdit = async (e) => {
                     orders.map((order) => (
                       <tr key={order.MaDonHang}>
                         <td className="px-4 py-2 text-center border-b">{order.MaDonHang}</td>
-                <td className="px-4 py-2 text-center border-b">{order.NgayTao}</td>
-                <td className="px-4 py-2 text-center border-b">{order.TongSoTien}</td>
-                <td className="px-4 py-2 text-center border-b">{order.NhanVienXuLy}</td>
-                <td className="px-4 py-2 text-center border-b">{order.KhoChua}</td>
-                <td className="px-4 py-2 text-center border-b">{order.NguoiNhan}</td>
-                <td className="px-4 py-2 text-center border-b">{order.CuaHangGui}</td>
-                <td className="px-4 py-2 text-center border-b">{order.NgayThanhToan}</td>
-                <td className="px-4 py-2 text-center border-b">{formatPaymentMethod(order.PhuongThucThanhToan)}</td>
-                <td className="px-4 py-2 text-center border-b">
+                        <td className="px-4 py-2 text-center border-b">{order.NgayTao}</td>
+                        <td className="px-4 py-2 text-center border-b">{order.TongSoTien}</td>
+                        <td className="px-4 py-2 text-center border-b">{order.NhanVienXuLy}</td>
+                        <td className="px-4 py-2 text-center border-b">{order.KhoChua}</td>
+                        <td className="px-4 py-2 text-center border-b">{order.NguoiNhan}</td>
+                        <td className="px-4 py-2 text-center border-b">{order.CuaHangGui}</td>
+                        <td className="px-4 py-2 text-center border-b">{order.NgayThanhToan}</td>
+                        <td className="px-4 py-2 text-center border-b">{formatPaymentMethod(order.PhuongThucThanhToan)}</td>
+                        <td className="px-4 py-2 text-center border-b"> 
                           <button
                             onClick={() => handleEdit(order)}
                             className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
