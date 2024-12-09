@@ -27,8 +27,8 @@ function AddOrder() {
   };
   
   const phuongThucThanhToanMap = {
-    'Tien Mat': 'Tiền mặt', 
-    'Chuyen Khoan': 'Chuyển khoản'
+    'Tien mat': 'Tiền mặt', 
+    'Chuyen khoan': 'Chuyển khoản'
   };
 
 
