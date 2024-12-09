@@ -2,6 +2,7 @@
 header("Access-Control-Allow-Methods: POST, PUT");
 header("Access-Control-Allow-Headers: Content-Type");
 include("db_connection.php");
+
 // Lấy dữ liệu JSON từ yêu cầu POST
 $data = json_decode(file_get_contents("php://input"), true);
 
@@ -19,23 +20,24 @@ if (isset($data['MaDonHang'])) {
     $NgayThanhToan = $data['NgayThanhToan'];
     $PhuongThucThanhToan = $data['PhuongThucThanhToan'];
 
-    // Cập nhật dữ liệu vào cơ sở dữ liệu
-    $sql = "UPDATE DonHang SET
-            NgayTao = :NgayTao, 
-            TongSoTien = :TongSoTien, 
-            TrangThaiDonHang = :TrangThaiDonHang, 
-            NhanVienXuLy = :NhanVienXuLy, 
-            KhoChua = :KhoChua, 
-            NguoiNhan = :NguoiNhan, 
-            CuaHangGui = :CuaHangGui, 
-            NgayThanhToan = :NgayThanhToan, 
-            PhuongThucThanhToan = :PhuongThucThanhToan
-            WHERE MaDonHang = :MaDonHang";
+    // Chuẩn bị câu lệnh gọi stored procedure
+    $sql = "EXEC UpdateDonHang
+            :MaDonHang, 
+            :NgayTao, 
+            :TongSoTien, 
+            :TrangThaiDonHang, 
+            :NhanVienXuLy, 
+            :KhoChua, 
+            :NguoiNhan, 
+            :CuaHangGui, 
+            :NgayThanhToan, 
+            :PhuongThucThanhToan";
 
     // Chuẩn bị câu lệnh SQL
     $stmt = $conn->prepare($sql);
 
     // Gắn giá trị vào các tham số trong câu lệnh
+    $stmt->bindParam(':MaDonHang', $MaDonHang);
     $stmt->bindParam(':NgayTao', $NgayTao);
     $stmt->bindParam(':TongSoTien', $TongSoTien);
     $stmt->bindParam(':TrangThaiDonHang', $TrangThaiDonHang);
@@ -45,7 +47,6 @@ if (isset($data['MaDonHang'])) {
     $stmt->bindParam(':CuaHangGui', $CuaHangGui);
     $stmt->bindParam(':NgayThanhToan', $NgayThanhToan);
     $stmt->bindParam(':PhuongThucThanhToan', $PhuongThucThanhToan);
-    $stmt->bindParam(':MaDonHang', $MaDonHang);
 
     // Thực thi câu lệnh
     $stmt->execute();
