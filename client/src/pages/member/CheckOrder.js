@@ -260,7 +260,7 @@ const handleSubmitEdit = async (e) => {
     <div className="bg-orange-400 w-full min-h-screen flex" >
       {/* Sidebar */}
       <div className="w-1/4 bg-orange-500 p-4" style={{ width: '20%' }}>
-        {["Đang chờ xử lý", "Đang giao hàng", "Đã giao", "Đã hủy"].map(
+        {["Đang chờ xử lý", "Đang giao hàng", "Đã giao hàng", "Đã hủy"].map(
           (status) => (
             <button
               key={status}
@@ -339,7 +339,7 @@ const handleSubmitEdit = async (e) => {
     >
       <option value="Dang cho xu ly">Đang chờ xử lý</option>
       <option value="Dang giao hang">Đang giao hàng</option>
-      <option value="Da giao">Đã giao hàng</option>
+      <option value="Da giao hang">Đã giao hàng</option>
       <option value="Da huy">Đã hủy</option>
     </select>
   </div>
