@@ -15,15 +15,15 @@ if (!empty($trangThai)) {
 
     $pdo = connectDB();
 
-    if (!empty($maDonHang)) {
-        // Lấy chi tiết một đơn hàng cụ thể
-        $stmt = $pdo->prepare("SELECT * FROM DonHang WHERE MaDonHang = :madonhang");
-        $stmt->bindValue(':madonhang', $maDonHang, PDO::PARAM_STR);
-        $stmt->execute();
-        $orderDetails = $stmt->fetch(PDO::FETCH_ASSOC);
-        echo json_encode(['order' => $orderDetails]);
-        exit;
-    }
+    // if (!empty($maDonHang)) {
+    //     // Lấy chi tiết một đơn hàng cụ thể
+    //     $stmt = $pdo->prepare("SELECT * FROM DonHang WHERE MaDonHang = :madonhang");
+    //     $stmt->bindValue(':madonhang', $maDonHang, PDO::PARAM_STR);
+    //     $stmt->execute();
+    //     $orderDetails = $stmt->fetch(PDO::FETCH_ASSOC);
+    //     echo json_encode(['order' => $orderDetails]);
+    //     exit;
+    // }
 
     // Đếm tổng số đơn hàng
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM DonHang WHERE TrangThaiDonHang = :trangthai");
