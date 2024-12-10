@@ -90,7 +90,7 @@ const Chitietnhanvien = () => {
       </div>
 
       {/* Main content area */}
-      <div className="bg-white shadow-lg rounded-lg p-6 relative w-4/5 max-w-4xl">
+      <div className="bg-white shadow-lg rounded-lg p-6 relative  w-11/12 max-w-6xl">
         {/* Position selection buttons */}
         <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 flex space-x-4">
           <button
@@ -125,22 +125,26 @@ const Chitietnhanvien = () => {
           </button>
         </div>
 
-        {/* Search input for full name */}
-        <div className="mt-6">
-          <input
-            type="text"
-            placeholder="Tìm kiếm theo họ và tên"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="px-4 py-2 border rounded-lg w-full max-w-md mx-auto"
-          />
-          <button
-            onClick={handleSearchByName}
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
-          >
-            Tìm kiếm
-          </button>
-        </div>
+      {/* Search input for full name */}
+<div className="mt-6 flex justify-center">
+  <div className="flex items-center w-full max-w-md">
+    <input
+      type="text"
+      placeholder="Tìm kiếm theo họ và tên"
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      onKeyDown={(e) => e.key === "Enter" && handleSearchByName()}
+      className="px-4 py-2 border rounded-l-lg flex-grow"
+    />
+    <button
+      onClick={handleSearchByName}
+      className="px-4 py-2 bg-blue-500 text-white rounded-r-lg"
+    >
+      Tìm kiếm
+    </button>
+  </div>
+</div>
+
 
         {/* Table content */}
         {error && (
@@ -155,11 +159,11 @@ const Chitietnhanvien = () => {
               <thead>
                 <tr>
                   <th className="px-4 py-2 border text-left">CCCD</th>
-                  <th className="px-4 py-2 border text-left">Họ và Tên</th>
-                  <th className="px-4 py-2 border text-left">Số Kỹ Năng</th>
-                  <th className="px-4 py-2 border text-left">Danh Sách Kỹ Năng</th>
+                  <th className="px-4 py-2 border text-left w-1/5">Họ và Tên</th>
+                  <th className="px-4 py-2 border text-center w-30">Số Kỹ Năng</th>
+                  <th className="px-4 py-2 border text-left w-100">Danh Sách Kỹ Năng</th>
                   <th className="px-4 py-2 border text-left">Tổng Điểm Kỹ Năng</th>
-                  <th className="px-4 py-2 border text-left">Mức Độ Năng Lực</th>
+                  <th className="px-4 py-2 border text-left w-1/5">Mức Độ Năng Lực</th>
                 </tr>
               </thead>
               <tbody>
@@ -167,9 +171,9 @@ const Chitietnhanvien = () => {
                   <tr key={employee.CCCD}>
                     <td className="px-4 py-2 border">{employee.CCCD}</td>
                     <td className="px-4 py-2 border">{employee.FullName}</td>
-                    <td className="px-4 py-2 border">{employee.SkillCount}</td>
+                    <td className="px-4 py-2 border text-center">{employee.SkillCount}</td>
                     <td className="px-4 py-2 border">{employee.SkillList}</td>
-                    <td className="px-4 py-2 border">{employee.SkillPointTotal}</td>
+                    <td className="px-4 py-2 border text-center">{employee.SkillPointTotal}</td>
                     <td className="px-4 py-2 border">{employee.CapacityLevel}</td>
                   </tr>
                 ))}
