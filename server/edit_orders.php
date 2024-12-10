@@ -65,7 +65,9 @@ if (isset($data['MaDonHang'])) {
         $stmt = null;
         $conn = null;
     } catch (PDOException $e) {
-        echo json_encode(['error' => 'Lỗi khi thực thi câu lệnh: ' . $e->getMessage()]);
+        //echo json_encode(['error' => 'Lỗi khi thực thi câu lệnh: ' . $e->getMessage()]);
+        http_response_code(500); // Trả HTTP status 500
+        echo json_encode(['error' => $e->getMessage()]);
     }
 } else {
     echo json_encode(['message' => 'Dữ liệu không hợp lệ.']);

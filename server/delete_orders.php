@@ -1,6 +1,14 @@
 <?php
 header("Access-Control-Allow-Methods: DELETE");
 include("db_connection.php");
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    header("HTTP/1.1 200 OK");
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Methods: GET, POST, DELETE, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization");
+    exit();
+}
 // Kết nối cơ sở dữ liệu
 $conn = connectDB();
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import SearchOrders from "./SearchOrders";
 
 const CheckOrder = () => {
   const [activeTab, setActiveTab] = useState("Đang chờ xử lý"); // Tab hiện tại
@@ -260,7 +261,7 @@ const handleSubmitEdit = async (e) => {
     <div className="bg-orange-400 w-full min-h-screen flex" >
       {/* Sidebar */}
       <div className="w-1/4 bg-orange-500 p-4" style={{ width: '20%' }}>
-        {["Đang chờ xử lý", "Đang giao hàng", "Đã giao hàng", "Đã hủy"].map(
+        {["Đang chờ xử lý", "Đang giao hàng", "Đã giao hàng", "Đã hủy", "Tra cứu"].map(
           (status) => (
             <button
               key={status}
@@ -287,6 +288,8 @@ const handleSubmitEdit = async (e) => {
           <div>Đang tải...</div>
         ) : error ? (
           <div className="text-red-500">{error}</div>
+        ) : activeTab === "Tra cứu" ? (
+          <SearchOrders /> // Gọi component "Tra cứu"
         ) : (
           <div className="bg-white p-4 rounded shadow-md">
             <h2 className="text-xl font-bold mb-4">Danh sách đơn hàng</h2>

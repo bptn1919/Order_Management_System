@@ -5,6 +5,7 @@ include("db_connection.php");
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && strpos($_SERVER['REQUEST_URI'], 'fetch_orders.php') !== false) {
     $trangThai = $_GET['trangthai'] ?? '';
     $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+    $maDonHang = $_GET['madonhang'] ?? ''; // Thêm mã đơn hàng nếu cần
     $pageSize = 10;
     $offset = ($page - 1) * $pageSize;
     // Nếu có trạng thái, xử lý chuyển chuỗi có dấu thành không dấu
@@ -13,6 +14,16 @@ if (!empty($trangThai)) {
 }
 
     $pdo = connectDB();
+
+    if (!empty($maDonHang)) {
+        // Lấy chi tiết một đơn hàng cụ thể
+        $stmt = $pdo->prepare("SELECT * FROM DonHang WHERE MaDonHang = :madonhang");
+        $stmt->bindValue(':madonhang', $maDonHang, PDO::PARAM_STR);
+        $stmt->execute();
+        $orderDetails = $stmt->fetch(PDO::FETCH_ASSOC);
+        echo json_encode(['order' => $orderDetails]);
+        exit;
+    }
 
     // Đếm tổng số đơn hàng
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM DonHang WHERE TrangThaiDonHang = :trangthai");

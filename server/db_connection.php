@@ -1,16 +1,20 @@
 <?php
-header('Access-Control-Allow-Origin: *');
-header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *'); // Cho phép truy cập từ mọi nguồn
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS'); // Cho phép các phương thức HTTP
+header('Access-Control-Allow-Headers: Content-Type'); // Cho phép các header
+header('Content-Type: application/json'); // Định dạng JSON cho output
 // Kết nối cơ sở dữ liệu
 function connectDB() {
-    $serverName = "DESKTOP-4CDMDCJ"; // Thay bằng tên server của bạn
-    $database = "database1";        // Thay bằng tên cơ sở dữ liệu
-    $username = "";                 // Thay bằng tên người dùng nếu có
-    $password = "";                 // Thay bằng mật khẩu nếu có
+    $serverName = "KHAITRAN"; 
+    $database = "QuanLyCuaHang";        
+    $username = "sa_user";                
+    $password = "";              
+
 
     try {
         $pdo = new PDO("sqlsrv:Server=$serverName;Database=$database", $username, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        //echo "Kết nối cơ sở dữ liệu thành công!";
         return $pdo;
     } catch (PDOException $e) {
         die(json_encode(['error' => 'Lỗi kết nối cơ sở dữ liệu: ' . $e->getMessage()]));
