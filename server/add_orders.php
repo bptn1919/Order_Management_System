@@ -1,17 +1,16 @@
 <?php
 include("db_connection.php");
-
 // Lấy dữ liệu từ form gửi đến
-$MaDonHang = $_POST['MaDonHang'];
-$NgayTao = $_POST['NgayTao'];
-$TongSoTien = $_POST['TongSoTien'];
-$TrangThai = $_POST['TrangThai'];
-$NhanVienXuLy = $_POST['NhanVienXuLy'];
-$KhoChua = $_POST['KhoChua'];
-$NguoiNhan = $_POST['NguoiNhan'];
-$CuaHangGui = $_POST['CuaHangGui'];
-$NgayThanhToan = $_POST['NgayThanhToan'];
-$PhuongThucThanhToan = $_POST['PhuongThucThanhToan'];
+$MaDonHang = $_POST['MaDonHang'] ?? null;
+$NgayTao = $_POST['NgayTao'] ?? null;
+$TongSoTien = $_POST['TongSoTien'] ?? null;
+$TrangThai = $_POST['TrangThai'] ?? null;
+$NhanVienXuLy = $_POST['NhanVienXuLy'] ?? null;
+$KhoChua = $_POST['KhoChua'] ?? null;
+$NguoiNhan = $_POST['NguoiNhan'] ?? null;
+$CuaHangGui = $_POST['CuaHangGui'] ?? null;
+$NgayThanhToan = $_POST['NgayThanhToan'] ?? null;
+$PhuongThucThanhToan = $_POST['PhuongThucThanhToan'] ?? null;
 
 // Kiểm tra nếu các trường không rỗng
 if (empty($MaDonHang) || empty($NgayTao) || empty($TongSoTien) || empty($TrangThai) || 
@@ -21,17 +20,14 @@ if (empty($MaDonHang) || empty($NgayTao) || empty($TongSoTien) || empty($TrangTh
     exit;
 }
 
+// Kết nối cơ sở dữ liệu
+$conn = connectDB();
+
 // Gọi stored procedure để thêm đơn hàng
 $sql = "EXEC InsertDonHang ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
 
 // Chuẩn bị câu lệnh
 $stmt = $conn->prepare($sql);
-
-// Kiểm tra nếu việc chuẩn bị câu lệnh thành công
-if ($stmt === false) {
-    echo json_encode(['success' => false, 'error' => 'Không thể chuẩn bị câu lệnh SQL.']);
-    exit;
-}
 
 // Bind các tham số
 $stmt->bindParam(1, $MaDonHang, PDO::PARAM_STR);
@@ -52,4 +48,8 @@ try {
 } catch (PDOException $e) {
     echo json_encode(['success' => false, 'error' => 'Lỗi: ' . $e->getMessage()]);
 }
+
+// Đóng kết nối
+$stmt = null;
+$conn = null;
 ?>

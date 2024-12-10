@@ -1,22 +1,26 @@
 
 <?php
-// Thông tin kết nối cơ sở dữ liệu
-$serverName = "DESKTOP-4CDMDCJ";  // Địa chỉ server SQL
-$database = "database2";      // Tên cơ sở dữ liệu
-header('Access-Control-Allow-Origin: *'); // Cung cấp quyền truy cập từ mọi nguồn
+header('Access-Control-Allow-Origin: *'); // Cho phép truy cập từ mọi nguồn
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS'); // Cho phép các phương thức HTTP
+header('Access-Control-Allow-Headers: Content-Type'); // Cho phép các header
+header('Content-Type: application/json'); // Định dạng JSON cho output
+// Kết nối cơ sở dữ liệu
+function connectDB() {
+    $serverName = "KHAITRAN"; 
+    $database = "QuanLyCuaHang";        
+    $username = "sa_user";                
+    $password = "";              
 
-// Kết nối đến SQL Server sử dụng PDO
-try {
-    $conn = new PDO("sqlsrv:server=$serverName;Database=$database", "", "");
-    // Thiết lập chế độ báo lỗi của PDO
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo"kết nối thành công";
 
-   
-} catch (PDOException $e) {
-    die(json_encode(['error' => 'Lỗi kết nối cơ sở dữ liệu: ' . $e->getMessage()])); 
+    try {
+        $pdo = new PDO("sqlsrv:Server=$serverName;Database=$database", $username, $password);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        //echo "Kết nối cơ sở dữ liệu thành công!";
+        return $pdo;
+    } catch (PDOException $e) {
+        die(json_encode(['error' => 'Lỗi kết nối cơ sở dữ liệu: ' . $e->getMessage()]));
+    }
 }
-
 // Hàm loại bỏ dấu tiếng Việt
 function removeVietnameseAccents($str) {
     $accents = [

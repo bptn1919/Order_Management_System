@@ -2,7 +2,6 @@
 header("Access-Control-Allow-Methods: POST, PUT");
 header("Access-Control-Allow-Headers: Content-Type");
 include("db_connection.php");
-
 // Lấy dữ liệu JSON từ yêu cầu POST
 $data = json_decode(file_get_contents("php://input"), true);
 
@@ -19,6 +18,9 @@ if (isset($data['MaDonHang'])) {
     $CuaHangGui = $data['CuaHangGui'];
     $NgayThanhToan = $data['NgayThanhToan'];
     $PhuongThucThanhToan = $data['PhuongThucThanhToan'];
+
+    // Kết nối cơ sở dữ liệu
+    $conn = connectDB();
 
     // Chuẩn bị câu lệnh gọi stored procedure
     $sql = "EXEC UpdateDonHang
@@ -48,19 +50,25 @@ if (isset($data['MaDonHang'])) {
     $stmt->bindParam(':NgayThanhToan', $NgayThanhToan);
     $stmt->bindParam(':PhuongThucThanhToan', $PhuongThucThanhToan);
 
-    // Thực thi câu lệnh
-    $stmt->execute();
+    try {
+        // Thực thi câu lệnh
+        $stmt->execute();
 
-    // Kiểm tra kết quả thực thi câu lệnh
-    if ($stmt->rowCount() > 0) {
-        echo json_encode(['message' => 'Cập nhật đơn hàng thành công']);
-    } else {
-        echo json_encode(['message' => 'Cập nhật thất bại. Vui lòng thử lại.']);
+        // Kiểm tra kết quả thực thi câu lệnh
+        if ($stmt->rowCount() > 0) {
+            echo json_encode(['message' => 'Cập nhật đơn hàng thành công']);
+        } else {
+            echo json_encode(['message' => 'Cập nhật thất bại. Vui lòng thử lại.']);
+        }
+
+        // Đóng kết nối
+        $stmt = null;
+        $conn = null;
+    } catch (PDOException $e) {
+        //echo json_encode(['error' => 'Lỗi khi thực thi câu lệnh: ' . $e->getMessage()]);
+        http_response_code(500); // Trả HTTP status 500
+        echo json_encode(['error' => $e->getMessage()]);
     }
-
-    // Đóng kết nối
-    $stmt = null;
-    $conn = null;
 } else {
     echo json_encode(['message' => 'Dữ liệu không hợp lệ.']);
 }

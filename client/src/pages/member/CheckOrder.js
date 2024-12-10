@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import SearchOrders from "./SearchOrders";
 
 const CheckOrder = () => {
   const [activeTab, setActiveTab] = useState("Đang chờ xử lý"); // Tab hiện tại
@@ -23,7 +24,7 @@ const CheckOrder = () => {
     setError(null); // Reset lỗi
     try {
       const response = await fetch(
-        `http://localhost/server/fetch_orders.php?trangthai=${encodeURIComponent(
+        `http://localhost:8000/fetch_orders.php?trangthai=${encodeURIComponent(
           trangThai
         )}&page=${page}`
       );
@@ -95,7 +96,7 @@ const handleSubmitEdit = async (e) => {
 
   try {
     // Gửi yêu cầu API tới PHP
-    const response = await fetch("http://localhost/server/edit_orders.php", {
+    const response = await fetch("http://localhost:8000/edit_orders.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -127,7 +128,7 @@ const handleSubmitEdit = async (e) => {
     if (window.confirm("Bạn có chắc chắn muốn xóa đơn hàng này không?")) {
       try {
         const response = await fetch(
-          `http://localhost/server/delete_orders.php?MaDonHang=${MaDonHang}`,
+          `http://localhost:8000/delete_orders.php?MaDonHang=${MaDonHang}`,
           { method: "DELETE" }
         );
 
@@ -260,7 +261,7 @@ const handleSubmitEdit = async (e) => {
     <div className="bg-orange-400 w-full min-h-screen flex" >
       {/* Sidebar */}
       <div className="w-1/4 bg-orange-500 p-4" style={{ width: '20%' }}>
-        {["Đang chờ xử lý", "Đang giao hàng", "Đã giao", "Đã hủy"].map(
+        {["Đang chờ xử lý", "Đang giao hàng", "Đã giao hàng", "Đã hủy", "Tra cứu"].map(
           (status) => (
             <button
               key={status}
@@ -287,6 +288,8 @@ const handleSubmitEdit = async (e) => {
           <div>Đang tải...</div>
         ) : error ? (
           <div className="text-red-500">{error}</div>
+        ) : activeTab === "Tra cứu" ? (
+          <SearchOrders /> // Gọi component "Tra cứu"
         ) : (
           <div className="bg-white p-4 rounded shadow-md">
             <h2 className="text-xl font-bold mb-4">Danh sách đơn hàng</h2>
@@ -339,7 +342,7 @@ const handleSubmitEdit = async (e) => {
     >
       <option value="Dang cho xu ly">Đang chờ xử lý</option>
       <option value="Dang giao hang">Đang giao hàng</option>
-      <option value="Da giao">Đã giao hàng</option>
+      <option value="Da giao hang">Đã giao hàng</option>
       <option value="Da huy">Đã hủy</option>
     </select>
   </div>

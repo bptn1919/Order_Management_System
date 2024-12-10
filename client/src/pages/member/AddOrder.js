@@ -27,8 +27,8 @@ function AddOrder() {
   };
   
   const phuongThucThanhToanMap = {
-    'Tien Mat': 'Tiền mặt', 
-    'Chuyen Khoan': 'Chuyển khoản'
+    'Tien mat': 'Tiền mặt', 
+    'Chuyen khoan': 'Chuyển khoản'
   };
 
 
@@ -50,7 +50,7 @@ function AddOrder() {
       formData.append('NgayThanhToan', NgayThanhToan);
       formData.append('PhuongThucThanhToan', PhuongThucThanhToan);
   
-      fetch("http://localhost:5000/server/add_orders.php", {
+      fetch("http://localhost:8000/add_orders.php", {
         method: 'POST',
         body: formData,
       })
