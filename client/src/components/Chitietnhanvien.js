@@ -15,7 +15,7 @@ const Chitietnhanvien = () => {
   // Function to fetch employee data from PHP backend based on position
   const fetchEmployeeData = async (position) => {
     try {
-      const response = await axios.get('http://localhost/get_employee_skills.php', {
+      const response = await axios.get('http://localhost:8000/get_employee_skills.php', {
         params: { position },
         timeout: 5000,
       });

@@ -72,27 +72,24 @@ const CheckOrder = () => {
   };
 
   // Hàm xử lý khi người dùng gửi form chỉnh sửa
-// Hàm xử lý khi người dùng gửi form chỉnh sửa
-const handleSubmitEdit = async (e) => {
-  e.preventDefault();
-
-  // Chuyển dữ liệu từ formData sang định dạng mà PHP có thể xử lý
-  const updatedOrderData = {
-    MaDonHang: formData.MaDonHang,
-    NgayTao: formData.NgayTao,
-    TongSoTien: formData.TongSoTien,
-    TrangThaiDonHang: formData.TrangThaiDonHang,
-    NhanVienXuLy: formData.NhanVienXuLy,
-    KhoChua: formData.KhoChua,
-    NguoiNhan: formData.NguoiNhan,
-    CuaHangGui: formData.CuaHangGui,
-    NgayThanhToan: formData.NgayThanhToan,
-    PhuongThucThanhToan: formData.PhuongThucThanhToan,
-  };
-
-  console.log("Dữ liệu gửi đi:", updatedOrderData);
-  console.log("Phương thức thanh toán trước khi gửi:", formData.PhuongThucThanhToan);
-
+  const handleSubmitEdit = async (e) => {
+    e.preventDefault();
+  
+    // Hiển thị hộp thoại xác nhận
+    if (window.confirm("Bạn có chắc chắn muốn cập nhật đơn hàng này không?")) {
+      // Chuyển dữ liệu từ formData sang định dạng mà PHP có thể xử lý
+      const updatedOrderData = {
+        MaDonHang: formData.MaDonHang,
+        NgayTao: formData.NgayTao,
+        TongSoTien: formData.TongSoTien,
+        TrangThaiDonHang: formData.TrangThaiDonHang,
+        NhanVienXuLy: formData.NhanVienXuLy,
+        KhoChua: formData.KhoChua,
+        NguoiNhan: formData.NguoiNhan,
+        CuaHangGui: formData.CuaHangGui,
+        NgayThanhToan: formData.NgayThanhToan,
+        PhuongThucThanhToan: formData.PhuongThucThanhToan,
+      };
 
   try {
     // Gửi yêu cầu API tới PHP
@@ -105,18 +102,21 @@ const handleSubmitEdit = async (e) => {
     });
 
     console.log("Phản hồi từ server:", response);
-
-    if (response.ok) {
-      console.log("Cập nhật thành công");
+    const data = await response.json();
+    if (response.ok && data.success) {
+      alert("Đơn hàng đã được cập nhật thành công!");
       fetchOrders(activeTab, pagination.currentPage); // Lấy lại danh sách đơn hàng sau khi chỉnh sửa
       setIsEditing(false); // Đóng form chỉnh sửa
     } else {
-      console.error("Cập nhật thất bại. Phản hồi:", response);
-      alert("Cập nhật thất bại. Vui lòng thử lại.");
+      alert('Có lỗi xảy ra: ' + (data.message || data.error || 'Không rõ lý do.'));
     }
   } catch (error) {
     console.error("Lỗi khi gửi API:", error);
     alert("Có lỗi xảy ra khi cập nhật đơn hàng.");
+  }}
+  else {
+    // Xử lý khi người dùng hủy việc cập nhật
+    alert("Cập nhật đơn hàng đã bị hủy.");
   }
 };
 

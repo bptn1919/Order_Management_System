@@ -24,7 +24,7 @@ const Chitietcuahang = () => {
 
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost/get_delivery_status.php", {
+      const response = await axios.get("http://localhost:8000/get_delivery_status.php", {
         params: { storeID: storeCode, orderStatus: orderStatus },
         timeout: 5000,
       });

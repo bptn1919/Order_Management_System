@@ -22,6 +22,7 @@ if (empty($MaDonHang) || empty($NgayTao) || empty($TongSoTien) || empty($TrangTh
 
 // Kết nối cơ sở dữ liệu
 $conn = connectDB();
+$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // Thiết lập chế độ lỗi
 
 // Gọi stored procedure để thêm đơn hàng
 $sql = "EXEC InsertDonHang ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
@@ -46,10 +47,18 @@ try {
     $stmt->execute();
     echo json_encode(['success' => true, 'message' => 'Thêm đơn hàng thành công']);
 } catch (PDOException $e) {
-    echo json_encode(['success' => false, 'error' => 'Lỗi: ' . $e->getMessage()]);
+    // Lấy thông báo lỗi từ PDOException
+    $errorMessage = $e->getMessage();
+
+    // Loại bỏ phần "SQLSTATE" hoặc thông tin kỹ thuật
+    if (strpos($errorMessage, '[SQL Server]') !== false) {
+        $errorMessage = substr($errorMessage, strpos($errorMessage, '[SQL Server]') + 12); // Lấy phần sau "[SQL Server]"
+    }
+
+    // Trả về lỗi đơn giản hơn
+    echo json_encode(['success' => false, 'error' => $errorMessage]);
 }
 
-// Đóng kết nối
 $stmt = null;
 $conn = null;
 ?>

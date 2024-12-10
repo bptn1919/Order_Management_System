@@ -56,20 +56,25 @@ if (isset($data['MaDonHang'])) {
 
         // Kiểm tra kết quả thực thi câu lệnh
         if ($stmt->rowCount() > 0) {
-            echo json_encode(['message' => 'Cập nhật đơn hàng thành công']);
-        } else {
-            echo json_encode(['message' => 'Cập nhật thất bại. Vui lòng thử lại.']);
-        }
+            echo json_encode(['message' => 'Cập nhật đơn hàng thành công', 'success' => true]);
+        } 
 
-        // Đóng kết nối
-        $stmt = null;
-        $conn = null;
     } catch (PDOException $e) {
-        //echo json_encode(['error' => 'Lỗi khi thực thi câu lệnh: ' . $e->getMessage()]);
-        http_response_code(500); // Trả HTTP status 500
-        echo json_encode(['error' => $e->getMessage()]);
+    // Lấy thông báo lỗi từ PDOException
+    $errorMessage = $e->getMessage();
+
+    // Loại bỏ phần "SQLSTATE" hoặc thông tin kỹ thuật
+    if (strpos($errorMessage, '[SQL Server]') !== false) {
+        $errorMessage = substr($errorMessage, strpos($errorMessage, '[SQL Server]') + 12); // Lấy phần sau "[SQL Server]"
+    }
+
+    // Trả về lỗi đơn giản hơn
+    echo json_encode(['success' => false, 'error' => $errorMessage]);
     }
 } else {
     echo json_encode(['message' => 'Dữ liệu không hợp lệ.']);
 }
+        // Đóng kết nối
+        $stmt = null;
+        $conn = null;
 ?>

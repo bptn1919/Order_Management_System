@@ -1,4 +1,3 @@
-
 <?php
 header('Access-Control-Allow-Origin: *'); // Cho phép truy cập từ mọi nguồn
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS'); // Cho phép các phương thức HTTP
@@ -6,9 +5,9 @@ header('Access-Control-Allow-Headers: Content-Type'); // Cho phép các header
 header('Content-Type: application/json'); // Định dạng JSON cho output
 // Kết nối cơ sở dữ liệu
 function connectDB() {
-    $serverName = "KHAITRAN"; 
-    $database = "QuanLyCuaHang";        
-    $username = "sa_user";                
+    $serverName = "DESKTOP-4CDMDCJ"; 
+    $database = "database2";        
+    $username = "";                
     $password = "";              
 
 
