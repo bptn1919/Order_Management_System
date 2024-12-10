@@ -1,5 +1,5 @@
 <?php
-yền truy cập từ mọi nguồn
+
 
 // Cấu hình kết nối
 $connectionString = "sqlsrv:Server=$serverName;Database=$database";
