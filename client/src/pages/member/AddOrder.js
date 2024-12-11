@@ -138,7 +138,7 @@ function AddOrder() {
               type="number"
               value={TongSoTien}
               onChange={(e) => setTongSoTien(e.target.value)}
-              step="0.01"
+              // step="0.01"
               required
               style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
             />

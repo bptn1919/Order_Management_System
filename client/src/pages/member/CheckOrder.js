@@ -16,6 +16,13 @@ const CheckOrder = () => {
     MaDonHang: "",
     NgayTao: "",
     TongSoTien: "",
+    TrangThaiDonHang: "",
+    NhanVienXuLy: "",
+    KhoChua: "",
+    NguoiNhan: "",
+    CuaHangGui: "",
+    NgayThanhToan: "",
+    PhuongThucThanhToan: "",
   });
 
   // Hàm lấy dữ liệu từ API
