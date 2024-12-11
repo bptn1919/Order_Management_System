@@ -19,10 +19,49 @@ if (empty($MaDonHang) || empty($NgayTao) || empty($TongSoTien) || empty($TrangTh
     echo json_encode(['success' => false, 'message' => 'Tất cả các trường đều phải nhập!']);
     exit;
 }
+// Kiểm tra xem NgayTao có bé hơn ngày hiện tại quá 7 ngày không
+$currentDate = new DateTime();  // Ngày hiện tại
+$NgayTaoDate = new DateTime($NgayTao);  // Ngày tạo đơn hàng
+
+$interval = $currentDate->diff($NgayTaoDate);  // Tính khoảng cách giữa ngày hiện tại và ngày tạo đơn hàng
+
+if ($interval->days > 7) {
+    echo json_encode(['success' => false, 'message' => 'Ngày tạo đơn hàng không được trước ngày hiện tại quá 7 ngày!']);
+    exit;
+}
 
 // Kết nối cơ sở dữ liệu
 $conn = connectDB();
 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // Thiết lập chế độ lỗi
+// Kiểm tra trước khi thêm đơn hàng (tránh lỗi từ Trigger)
+try {
+    $checkSql = "SELECT SucChuaToiDa, SoLuongDonHang FROM Kho WHERE MaKho = ?";
+    $checkStmt = $conn->prepare($checkSql);
+    $checkStmt->execute([$KhoChua]);
+    $kho = $checkStmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($kho) {
+        $soLuongHienTai = $kho['SoLuongDonHang'];
+        $sucChuaToiDa = $kho['SucChuaToiDa'];
+
+        if ($soLuongHienTai + 1 > $sucChuaToiDa) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Số lượng đơn hàng vượt quá sức chứa tối đa của kho. Vui lòng chuyển sang kho khác.'
+            ]);
+            exit;
+        }
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Kho chươa không tồn tại.']);
+        exit;
+    }
+} catch (PDOException $e) {
+    echo json_encode([
+        'success' => false,
+        'error' => 'Lỗi khi kiểm tra kho: ' . $e->getMessage()
+    ]);
+    exit;
+}
 
 // Gọi stored procedure để thêm đơn hàng
 $sql = "EXEC InsertDonHang ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
@@ -54,6 +93,7 @@ try {
     if (strpos($errorMessage, '[SQL Server]') !== false) {
         $errorMessage = substr($errorMessage, strpos($errorMessage, '[SQL Server]') + 12); // Lấy phần sau "[SQL Server]"
     }
+    
 
     // Trả về lỗi đơn giản hơn
     echo json_encode(['success' => false, 'error' => $errorMessage]);

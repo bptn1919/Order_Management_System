@@ -479,15 +479,15 @@ const CheckOrder = () => {
                         <td className="px-4 py-2 text-center border-b"> 
                           <button
                             onClick={() => handleEdit(order)}
-                            className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+                            className="bg-blue-500 text-white px-4 py-2 rounded w-20"
                           >
-                            Chỉnh sửa
+                            Chỉnh
                           </button>
                           <button
                             onClick={() => handleDelete(order.MaDonHang)}
-                            className="bg-red-500 text-white px-4 py-2 rounded"
+                            className="bg-red-500 text-white px-4 py-2 rounded w-20"
                           >
-                            Xóa
+                            Xóa 
                           </button>
                         </td>
                       </tr>
