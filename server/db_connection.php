@@ -1,4 +1,8 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 header('Access-Control-Allow-Origin: *'); // Cho phép truy cập từ mọi nguồn
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS'); // Cho phép các phương thức HTTP
 header('Access-Control-Allow-Headers: Content-Type'); // Cho phép các header
@@ -10,16 +14,19 @@ function connectDB() {
     $username = "";                
     $password = "";              
 
-
     try {
         $pdo = new PDO("sqlsrv:Server=$serverName;Database=$database", $username, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        echo "Kết nối cơ sở dữ liệu thành công!";
+        // echo "Kết nối cơ sở dữ liệu thành công!";
         return $pdo;
     } catch (PDOException $e) {
         die(json_encode(['error' => 'Lỗi kết nối cơ sở dữ liệu: ' . $e->getMessage()]));
     }
 }
+// // Gọi hàm kết nối để kiểm tra
+// connectDB();
+
+
 // Hàm loại bỏ dấu tiếng Việt
 function removeVietnameseAccents($str) {
     $accents = [
