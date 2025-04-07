@@ -14,7 +14,7 @@ function connectDB() {
     try {
         $pdo = new PDO("sqlsrv:Server=$serverName;Database=$database", $username, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        //echo "Kết nối cơ sở dữ liệu thành công!";
+        echo "Kết nối cơ sở dữ liệu thành công!";
         return $pdo;
     } catch (PDOException $e) {
         die(json_encode(['error' => 'Lỗi kết nối cơ sở dữ liệu: ' . $e->getMessage()]));
